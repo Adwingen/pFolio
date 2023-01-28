@@ -1,0 +1,92 @@
+#include <stdio.h>
+#include <stdint.h>
+#include <string.h>
+
+
+
+#define MAX_JOGADAS 20
+
+int Primo(int n)
+{
+	int divisor = 2;
+	while (divisor * divisor <= n) {
+		if (n % divisor == 0)
+			return 0;
+		divisor++;
+	}
+	return 1;
+}
+
+
+int JPLanceValido(int k, int w)
+{
+	int i;
+	int z;
+	if (k < w) // w é maior que k pelo é sempre inválido
+		return 0;
+	z = k;
+	for (i = 2; i <= k; i++)
+	{
+		if (Primo(i) && (k % i == 0)) //verifica se é primo
+			while (k % i == 0) // percorre os fatores primos
+			{
+
+				k = k / i;
+				if (z / i == w) // caso 1
+				{
+					return 1;
+					break;
+				}
+				if (z - i == w) // caso 2
+				{
+					return 1;
+					break;
+				}
+
+			}
+	}
+	return 0;
+
+}
+
+
+
+int JPJogadas(int k, int jogadas[]) 
+{
+	int n = 0;
+	int divisor = 2;
+	while (divisor  <= k) 
+	{
+		if (k % divisor == 0 && Primo(divisor))
+		{
+			jogadas[n++] = k / divisor;
+			jogadas[n++] = k - divisor;
+		}
+		divisor++;
+	}
+	if (Primo(k))
+	{
+		jogadas[n++] = k / k;
+		jogadas[n++] = k - k;
+	}
+	
+
+	return n;
+}
+
+
+
+int main()
+{
+	int k, n, i;
+	int jogadas[MAX_JOGADAS];
+	printf("\nIndique Posicao (um numero): ");
+	scanf("%d", &k);
+	// calcular as jogadas
+	n = JPJogadas(k, jogadas);
+	// mostrar as jogadas
+	printf("\nJogadas (%d): ", n);
+	for (i = 0; i < n; i++)
+		printf("%d ", jogadas[i]);
+}
+
